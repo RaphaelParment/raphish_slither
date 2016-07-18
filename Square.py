@@ -38,15 +38,46 @@ class Square(object):
     def draw(self, surface):
         pygame.draw.rect(surface, self.getColour(), self.getBBox())
 
+    def leftWallCollision(self, xCoord):
+        if(self.getXPos() + xCoord < 0):
+            return True
+        else:
+            return False
+
+    def rightWallCollision(self, xCoord):
+        if(self.getXPos() + xCoord + self.getSize() > config.width):
+            return True
+        else:
+            return False
+
+    def topWallCollision(self, yCoord):
+        if(self.getYPos() + yCoord < 0):
+            return True
+        else:
+            return False
+
+    def bottomWallCollision(self, yCoord):
+        if(self.getYPos() + yCoord + self.getSize() > config.height):
+            return True
+        else:
+            return False        
+
     def move(self, direction):
         if direction == Direction.UP:
-            self.setYPos(-config.speed)
+            if(not self.topWallCollision(-config.speedFactor*config.speed)):
+                self.setYPos(-config.speedFactor*config.speed)
+        
         elif direction == Direction.DOWN:
-            self.setYPos(config.speed)
+            if(not self.bottomWallCollision(config.speedFactor*config.speed)):
+                self.setYPos(config.speedFactor*config.speed)
+        
         elif direction == Direction.RIGHT:
-            self.setXPos(config.speed)
+            if(not self.rightWallCollision(config.speedFactor*config.speed)):
+                self.setXPos(config.speedFactor*config.speed)
+        
         elif direction == Direction.LEFT:
-            self.setXPos(-config.speed)
+            if(not self.leftWallCollision(-config.speedFactor*config.speed)):
+                self.setXPos(-config.speedFactor*config.speed)
         else:
             raise DirectionException("Must input valid direction, up, down, right, left")
         
